@@ -1,0 +1,14 @@
+test_a_control_must_fail_for_its_targeted_reason (test_harness.Harness.test_a_control_must_fail_for_its_targeted_reason) ... ok
+test_a_control_that_did_not_run_cannot_validate_the_harness (test_harness.Harness.test_a_control_that_did_not_run_cannot_validate_the_harness) ... ok
+test_zero_exercise_cannot_support_a_positive_claim (test_harness.Harness.test_zero_exercise_cannot_support_a_positive_claim) ... ok
+test_conflicting_request_preserves_the_original_title (test_store.Tasks.test_conflicting_request_preserves_the_original_title) ... ok
+test_different_requests_can_have_the_same_title (test_store.Tasks.test_different_requests_can_have_the_same_title) ... ok
+test_invalid_titles_and_request_ids_add_nothing (test_store.Tasks.test_invalid_titles_and_request_ids_add_nothing) ... ok
+test_retry_returns_the_original_task (test_store.Tasks.test_retry_returns_the_original_task) ... ok
+test_title_boundary_and_unicode_are_valid (test_store.Tasks.test_title_boundary_and_unicode_are_valid) ... ok
+test_titles_are_normalized_before_comparing_a_retry (test_store.Tasks.test_titles_are_normalized_before_comparing_a_retry) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.005s
+
+OK

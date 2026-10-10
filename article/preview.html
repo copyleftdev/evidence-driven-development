@@ -1,0 +1,240 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evidence-Driven Development: Give Your Coding Agent Something to Prove</title><style>
+:root{color-scheme:light;--ink:#282723;--muted:#6d685f;--paper:#faf8f2;--accent:#aa432a}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink)}
+.masthead{max-width:1120px;margin:auto;padding:28px 32px 18px;display:flex;justify-content:space-between;font:700 11px/1.5 system-ui;letter-spacing:2px;border-bottom:1px solid #ccc3b6}
+header{max-width:900px;margin:56px auto 44px;padding:0 28px}.eyebrow{font:700 12px system-ui;letter-spacing:2px;color:var(--accent)}
+h1{font:500 clamp(36px,5.2vw,64px)/1.08 Georgia,serif;letter-spacing:-1.6px;margin:20px 0 24px;max-width:870px}
+.dek{font:20px/1.55 system-ui;color:var(--muted);max-width:720px}.meta{margin-top:22px;font:12px system-ui;color:var(--muted)}
+.cover{display:block;width:100%;height:auto;margin:30px 0 0;border:1px solid #d7cebf}
+main{max-width:780px;margin:auto;padding:0 28px 88px;font:20px/1.75 Georgia,serif}p{margin:0 0 25px}
+main>p:first-child{font-size:25px;line-height:1.55}h2{font:650 29px/1.2 system-ui;margin:56px 0 22px;letter-spacing:-.7px}h3{font:650 22px system-ui}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px;overflow-wrap:anywhere}
+strong{font-weight:700}li{margin:10px 0}ul,ol{padding-left:25px}code{font:14px/1.6 ui-monospace,monospace;background:#ece7dc;border-radius:3px;padding:2px 5px;overflow-wrap:anywhere}
+pre{background:#292a27;color:#f5f0e5;border-radius:8px;padding:24px;margin:28px 0;overflow-x:auto;max-width:100%}pre code{padding:0;background:none;color:inherit;white-space:pre;overflow-wrap:normal}
+table{font:14px/1.5 system-ui;border-collapse:collapse;width:100%;margin:30px 0}th{text-align:left;background:#eae4d8}td,th{padding:12px 10px;border-bottom:1px solid #d7cebf;vertical-align:top}
+blockquote{border-left:3px solid var(--accent);margin:30px 0;padding:5px 22px;color:var(--muted)}
+footer{border-top:1px solid #d7cebf;padding:28px;text-align:center;font:12px system-ui;color:var(--muted)}
+@media(max-width:600px){.masthead{padding:20px}.masthead span:last-child{display:none}header{margin-top:32px;padding:0 20px}.dek{font-size:17px}main{padding:0 20px 55px;font-size:18px}h2{font-size:25px}pre{padding:16px}table{display:block;overflow:auto;font-size:12px}h1{letter-spacing:-1px}}
+</style>
+<div class="masthead"><span>FIELD NOTES / SOFTWARE PRACTICE</span><span>LOCAL EDITORIAL PREVIEW · UNPUBLISHED</span></div>
+<header><div class="eyebrow">A PRACTICAL TUTORIAL</div><h1>Evidence-Driven Development: Give Your Coding Agent Something to Prove</h1>
+<p class="dek">Build a small app, challenge its promises, and keep the evidence another developer needs to reproduce the result.</p>
+<div class="meta">Python + SQLite · No model account required · Original teaching example</div>
+<img class="cover" src="cover.svg" alt="Give your agent something to prove: claim, experiment, decision"></header>
+<main><p>An AI coding agent finishes the feature. The tests pass. The explanation sounds reasonable.</p>
+<p>Then someone asks a small question: <strong>“What happens if I run that request again?”</strong></p>
+<p>That question can change the shape of a project. Now “done” needs to mean something observable. The answer needs an experiment, and the experiment needs a way to be wrong.</p>
+<p>This tutorial builds a tiny task list around that idea. By the end, you will have a working application, two deliberately broken versions, and a folder of evidence showing which promises each version keeps.</p>
+<p>I use <strong>evidence-driven development</strong> to describe this working habit: write down a claim, decide what would disprove it, run the relevant experiment, and let the result govern the next decision.</p>
+<p>The coding agent can help at every step. The evidence must remain inspectable without trusting the agent's summary.</p>
+<h2>First, some credit for the idea</h2>
+<p>The name predates coding agents. Jan Bosch's 2017 book, <em>Speed, Data, and Ecosystems</em>, includes an Evidence-Driven Development chapter. Its contents connect requirements, hypotheses and experiments. I'm using the term for a practical agent-assisted workflow, without claiming to have invented a methodology. <a href="https://www.routledge.com/Speed-Data-and-Ecosystems-Succeeding-in-a-Software-Centric-World/Bosch/p/book/9781315270685">Publisher's catalog</a>.</p>
+<p>There is related work in AI, too. Xia and colleagues describe evaluation-driven development and operations, or EDDOps, as a continuing feedback loop for LLM agents. Their paper addresses a broader agent lifecycle than the small application we will build here. <a href="https://arxiv.org/abs/2411.13768">EDDOps paper</a>.</p>
+<p>TDD still gives us a useful red–green–refactor loop. BDD helps express behavior through examples people can discuss. In this tutorial, EDD names the discipline of keeping the claim, execution conditions, observed result and resulting decision connected. Those practices fit together. <a href="https://agilealliance.org/glossary/tdd/">TDD</a>, <a href="https://agilealliance.org/glossary/given-when-then/">Given–When–Then</a>.</p>
+<h2>A small application with a real promise</h2>
+<p>Our app is <strong>Tiny Tasks</strong>. It adds tasks and lists them. Python and SQLite are enough; the application and experiment runner use only the Python standard library. Use Python 3.10 or newer with SQLite support.</p>
+<p>The companion project contains the complete source and the evidence runner. From its directory:</p>
+<pre><code class="language-sh">python3 -m tiny_tasks add &quot;Water plants&quot; --request-id plant-1
+python3 -m tiny_tasks list
+</code></pre>
+<p>The first command returns a task. The second starts a new process and reads it back. The default database lives at <code>.local/tasks.sqlite</code>.</p>
+<p>The request ID belongs to the user's intended action. When the caller retries that same action, it sends the same ID. A genuinely new task gets a new ID—even if the title happens to match.</p>
+<p>That small distinction gives us something worth proving.</p>
+<h2>1. Write a claim that can lose</h2>
+<p>“Make the task list reliable” leaves too much room for interpretation.</p>
+<p>Here is the experiment contract we wrote before implementing the application:</p>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>A result that disproves it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Acknowledged tasks survive a process ending</td>
+<td>A new process cannot read the saved task</td>
+</tr>
+<tr>
+<td>Repeating a create request returns the original task</td>
+<td>A retry creates another task or returns a different ID</td>
+</tr>
+<tr>
+<td>A request ID cannot silently acquire a different meaning</td>
+<td>Reusing it with a different title succeeds or changes saved data</td>
+</tr>
+<tr>
+<td>Invalid input leaves the list alone</td>
+<td>An empty title adds a task</td>
+</tr>
+</tbody>
+</table>
+<p>The repository records those claims in <code>experiments/001-reliable-tasks/experiment.json</code>. It also declares three restart rounds, eight concurrent retry processes, two independent repetitions, and the scenarios that must actually execute.</p>
+<p>These numbers are a small teaching workload. They are not a statistical reliability estimate or a throughput target.</p>
+<p>Before asking an agent for code, give it this kind of task:</p>
+<pre><code class="language-text">Build a local task list that adds and lists tasks.
+
+First propose observable claims and the outcomes that would disprove them.
+Preserve acknowledged tasks across fresh processes.
+Bind each create request ID to one normalized title and one task.
+Exercise concurrent retries and conflicting reuse.
+
+Keep the application small. Use local synthetic data.
+Do not claim properties the experiment does not exercise.
+</code></pre>
+<p>Review the claims yourself. An agent that quietly narrows “survives interruption” into “works twice in the same object” can produce a beautiful test for the wrong promise.</p>
+<h2>2. Give the agent a place to leave evidence</h2>
+<p>The project has a few small documents with distinct jobs:</p>
+<pre><code class="language-text">AGENTS.md                         working rules and commands
+docs/plan.md                      task progress and handoff
+docs/decisions.md                 decisions and their reasons
+experiments/001-reliable-tasks/
+  experiment.json                claims written before code
+  README.md                      findings and limitations
+  runs/&lt;run-id&gt;/                  actual outputs and source hashes
+</code></pre>
+<p><code>AGENTS.md</code> tells an agent where these things live. The experiment file defines the claim. The run directory records what happened. The decision document explains what we chose because of it.</p>
+<p>You can start with a short instruction:</p>
+<pre><code class="language-text">Read the experiment contract before changing behavior.
+Run the declared scenarios and keep failed outputs.
+Create a new run directory; never replace an earlier run.
+Report which claims passed, which failed, and what was not tested.
+</code></pre>
+<p>Instructions need maintenance. If a useful constraint already lives in a canonical document, link to it. A growing pile of repeated instructions can make the next agent's job harder. OpenAI's current guidance similarly favors focused instructions and task-specific context. <a href="https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra">Guidance on skills and project instructions</a>.</p>
+<h2>3. Implement the smallest useful design</h2>
+<p>Tiny Tasks stores each task alongside its request ID. A unique database constraint prevents two stored rows from sharing that ID.</p>
+<p>Creation uses one transaction. It looks for the ID, compares the normalized title if the ID exists, and inserts only when it is new. The command returns success after the transaction commits.</p>
+<p>The central part of <code>tiny_tasks/store.py</code> looks like this:</p>
+<pre><code class="language-python">db.execute(&quot;BEGIN IMMEDIATE&quot;)
+try:
+    old = db.execute(
+        &quot;SELECT id, title FROM tasks WHERE request_id = ?&quot;,
+        (request_id,),
+    ).fetchone()
+
+    if old:
+        if old[&quot;title&quot;] != title:
+            raise Conflict(&quot;request ID was already used with another title&quot;)
+        result = {&quot;task&quot;: dict(old), &quot;created&quot;: False}
+    else:
+        cursor = db.execute(
+            &quot;INSERT INTO tasks(request_id, title) VALUES (?, ?)&quot;,
+            (request_id, title),
+        )
+        result = {
+            &quot;task&quot;: {&quot;id&quot;: cursor.lastrowid, &quot;title&quot;: title},
+            &quot;created&quot;: True,
+        }
+
+    db.execute(&quot;COMMIT&quot;)
+    return result
+except BaseException:
+    db.execute(&quot;ROLLBACK&quot;)
+    raise
+</code></pre>
+<p>“Normalized” has an explicit meaning here: the app removes leading and trailing whitespace before comparing titles. The database connection, schema and validation live in the complete source; the excerpt shows the transaction boundary.</p>
+<p>That boundary matters because checking in one transaction and inserting later would leave room for another process to intervene. SQLite documents the write-transaction behavior of <code>BEGIN IMMEDIATE</code> in its <a href="https://www.sqlite.org/lang_transaction.html">transaction reference</a>. Still, plausible code is only a candidate explanation. We have to run the workload we promised to support.</p>
+<h2>4. Cross the boundary you are making a claim about</h2>
+<p>A test can create a <code>Store</code>, add a task and immediately list it. That is useful. It does not establish what happens in a new process.</p>
+<p>Our experiment runner invokes the actual CLI in subprocesses. Every command starts fresh. For the restart scenario, it adds three tasks in sequence, checking after each successful create that a separate process can read the expected list.</p>
+<p>For retries, it exercises two different situations:</p>
+<ul>
+<li>A create succeeds, its caller ignores the response, and a fresh process repeats the request.</li>
+<li>Eight processes submit the same request, launched through a synchronization barrier.</li>
+</ul>
+<p>The second scenario checks the returned identities, the number of <code>created: true</code> responses and the rows actually saved. Exactly one task should exist.</p>
+<p>The ignored response is a controlled stand-in for a caller that is unsure whether an action succeeded. We did not cut a network connection or kill a process during a commit. Keeping that distinction visible makes the result useful.</p>
+<h2>5. Break the application on purpose</h2>
+<p>Now comes my favorite part: establish that the experiment can catch the defect it claims to detect.</p>
+<p>The <code>lab/</code> directory contains two intentionally wrong implementations. They use the same command shape as the real app:</p>
+<ul>
+<li><strong>Volatile:</strong> returns successful creates but keeps no durable tasks.</li>
+<li><strong>Duplicates:</strong> saves tasks but ignores request identity, inserting a row on every retry.</li>
+</ul>
+<p>These are negative controls: known-bad examples that the checks must reject for a specific reason. They are teaching fixtures, not bugs we are pretending to have discovered accidentally.</p>
+<p>The volatile version must fail the restart claim. The duplicate-accepting version must fail the concurrent retry claim. A syntax error in a broken version would not establish either property, so inspect the saved responses and failure reasons.</p>
+<p>Review caught a weakness in the first version of the gate: it accepted a control's failure without checking its reason. A child-process crash could have masqueraded as a successful bug detection. We added regression tests, required nonzero exercise counts for the controls, and made the gate check the targeted failure reason. The earlier run remains in the repository, with that gate limitation recorded.</p>
+<p>There is another way to get a misleading green result: execute nothing.</p>
+<p>Our runner tracks how many times each required scenario ran. This intentionally incomplete report must fail even though every claimed outcome says <code>true</code>:</p>
+<pre><code class="language-python">empty = {
+    &quot;claims&quot;: {name: True for name in required_scenarios},
+    &quot;exercised&quot;: {name: 0 for name in required_scenarios},
+}
+</code></pre>
+<p>A check that refuses zero activity is an <strong>exercise gate</strong>. It answers a basic question before interpreting success: did we actually attempt the scenarios our conclusion depends on?</p>
+<h2>6. Run it and keep the receipts</h2>
+<p>From the companion project:</p>
+<pre><code class="language-sh">python3 -m unittest discover -s tests -v
+python3 scripts/prove.py
+</code></pre>
+<p>The first command runs nine tests: six for application behavior and three for the harness. The second runs the process-boundary experiment, both negative-control implementations and the empty-exercise control.</p>
+<p>In the recorded run, the results were:</p>
+<table>
+<thead>
+<tr>
+<th>Implementation</th>
+<th>Restart</th>
+<th>Retry after ignored response</th>
+<th>Concurrent retry</th>
+<th>Conflicting reuse</th>
+<th>Invalid input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Volatile control</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Duplicate-accepting control</td>
+<td>Pass</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>SQLite candidate</td>
+<td>Pass</td>
+<td>Pass</td>
+<td>Pass</td>
+<td>Pass</td>
+<td>Pass</td>
+</tr>
+</tbody>
+</table>
+<p>Each implementation ran twice. The pass/fail outcomes and exercise counts matched between repetitions. The SQLite candidate exercised three restart rounds, one ignored-response retry, eight concurrent submissions, one conflicting reuse and one invalid-input scenario per repetition.</p>
+<p>The two controls failed where intended. The report with zero exercised scenarios was rejected. Those facts allow the overall experiment gate to pass.</p>
+<p>You will find a new directory under <code>experiments/001-reliable-tasks/runs/</code>. It contains:</p>
+<ul>
+<li>A manifest with Python and SQLite versions and hashes of the application, harness and contract.</li>
+<li>A response trace and scenario outcomes for each implementation and repetition.</li>
+<li>A summary with the overall decision and its scope.</li>
+</ul>
+<p>The captured run used for this article is <code>20261010T042729Z-633b0705</code>. Your run will have its own ID. The project preserves the original directory so you can inspect the evidence behind this table.</p>
+<p>The hashes help identify the source files used in a run. They do not establish who performed it, and someone who can rewrite both the files and their manifest can forge a matching set. This is reproducible local evidence, not a signed attestation system.</p>
+<h2>7. Make a decision the evidence supports</h2>
+<p>We can now choose SQLite for this local application's declared process and retry behavior.</p>
+<p>We have not tested power failure, a corrupt disk, a network filesystem, large task volumes, security boundaries or sustained throughput. We have not measured how often different coding models produce a correct implementation. Those would be separate questions with different experiments.</p>
+<p>This is also where you resist rounding a result into the outcome you wanted. If a target is missed, keep the result and the original threshold visible. A follow-up experiment can ask a better question; it should have a new identity.</p>
+<p>A useful agent handoff looks like this:</p>
+<pre><code class="language-text">Implemented: persistent task creation and payload-bound retries.
+Verified: the recorded process-boundary scenarios and negative controls.
+Evidence: the named run directory and source manifest.
+Not tested: power loss, disk corruption, throughput or model reliability.
+Decision: use this implementation for the documented local scope.
+</code></pre>
+<p>That is enough for another developer—or another agent—to pick up the work without inheriting an unsupported “everything works.”</p>
+<h2>What changes when agents do more of the work?</h2>
+<p>An agent can propose the claims, build the application, write the harness and summarize the run. That is convenient, but all four can share the same mistaken assumption.</p>
+<p>Give the claim a review before implementation. Inspect the failure cases. Keep an external observation boundary: a subprocess, an HTTP client, an independently written reference calculation, or a recorded user journey appropriate to the property. Check the actual artifacts when an agent reports success.</p>
+<p>A second model may help review the work. Its approval is another judgment to examine. For this tutorial, deterministic process results carry the decision; no model judge is needed.</p>
+<p>The app itself does not use an LLM. That is deliberate. You can practice this development workflow with your preferred coding agent while keeping the example's behavior easy to inspect and its runs inexpensive to repeat.</p>
+<h2>Try it on your next feature</h2>
+<p>Choose one promise your users care about. Describe an observation that would prove it wrong. Run a test that crosses the relevant boundary. Feed that test a known-bad case. Save the result with enough context that somebody else can challenge it.</p>
+<p>Then ask your coding agent for the evidence directory.</p></main><footer>Independent teaching project · The article remains a draft.</footer></html>

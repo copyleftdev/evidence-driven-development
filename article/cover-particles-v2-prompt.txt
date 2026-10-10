@@ -1,0 +1,11 @@
+Generation mode: built-in image_gen
+Asset: cover-particles-v2.png
+
+Use case: stylized-concept.
+Create a masterful editorial art cover for a DEV.to article about Evidence-Driven Development: software claims becoming trustworthy through observed results. Panoramic 2.38:1 composition, ideally 2400x1008. This is a finished artwork, not a mockup.
+
+A euphoric, sculptural stream of thousands of exquisitely crisp luminous particles sweeps horizontally across a deep midnight ink background. On the left, scattered cyan and electric-blue points trace delicate telemetry trajectories; through the center, the particles converge into a small number of extraordinarily clear, coherent ribbons, punctuated by bright discrete evidence nodes; to the right, the ribbons resolve into a beautifully ordered, radiant constellation of aligned points and fine connecting paths. A visual transition from uncertainty to demonstrated clarity, retaining elegance and air throughout. Dimensional light sculpture, microscopic granularity, fine filament trails, precise bright focal points, subtle spectral refraction. Strong silhouette and intentional negative space; exceptionally readable at thumbnail size. Sensuous sweeping motion and a celebratory feeling of discovery.
+
+Color: luminous turquoise and arctic cyan balanced with vivid coral-orange and warm gold, restrained touches of violet; pure, clean color separation, deep rich darks, controlled highlights. Museum-quality generative art meets premium science editorial photography, sharp detail rather than hazy bloom. Abstract but comprehensible, deliberate rather than random visual noise.
+Keep key forms inside the central 80% width and 70% height for safe cropping. Edge-to-edge artwork.
+NO text, letters, numbers, logos, brands, UI panels, code snippets, human figures, robots, brains, checkmark icons, watermarks, generic circuit boards, or central portal ring.

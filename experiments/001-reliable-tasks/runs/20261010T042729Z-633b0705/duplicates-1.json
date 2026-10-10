@@ -1,0 +1,370 @@
+{
+  "claims": {
+    "concurrent_retry": false,
+    "conflict": false,
+    "ignored_response_retry": false,
+    "restart": true,
+    "validation": true
+  },
+  "exercised": {
+    "concurrent_retry": 8,
+    "conflict": 1,
+    "ignored_response_retry": 1,
+    "restart": 3,
+    "validation": 1
+  },
+  "failures": {
+    "concurrent_retry": "AssertionError: concurrent retries returned different IDs",
+    "conflict": "AssertionError: conflicting key was not rejected",
+    "ignored_response_retry": "AssertionError: retry reported another creation"
+  },
+  "passed": false,
+  "trace": [
+    {
+      "arguments": [
+        "add",
+        "Task 0",
+        "--request-id",
+        "restart-0"
+      ],
+      "database": "restart.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 1,
+          "title": "Task 0"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "list"
+      ],
+      "database": "restart.sqlite",
+      "exit_code": 0,
+      "response": {
+        "tasks": [
+          {
+            "id": 1,
+            "title": "Task 0"
+          }
+        ]
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Task 1",
+        "--request-id",
+        "restart-1"
+      ],
+      "database": "restart.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 2,
+          "title": "Task 1"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "list"
+      ],
+      "database": "restart.sqlite",
+      "exit_code": 0,
+      "response": {
+        "tasks": [
+          {
+            "id": 1,
+            "title": "Task 0"
+          },
+          {
+            "id": 2,
+            "title": "Task 1"
+          }
+        ]
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Task 2",
+        "--request-id",
+        "restart-2"
+      ],
+      "database": "restart.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 3,
+          "title": "Task 2"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "list"
+      ],
+      "database": "restart.sqlite",
+      "exit_code": 0,
+      "response": {
+        "tasks": [
+          {
+            "id": 1,
+            "title": "Task 0"
+          },
+          {
+            "id": 2,
+            "title": "Task 1"
+          },
+          {
+            "id": 3,
+            "title": "Task 2"
+          }
+        ]
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Water plants",
+        "--request-id",
+        "plant-1"
+      ],
+      "database": "ignored_response_retry.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 1,
+          "title": "Water plants"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Water plants",
+        "--request-id",
+        "plant-1"
+      ],
+      "database": "ignored_response_retry.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 2,
+          "title": "Water plants"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "list"
+      ],
+      "database": "concurrent_retry.sqlite",
+      "exit_code": 0,
+      "response": {
+        "tasks": []
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Read a chapter",
+        "--request-id",
+        "book-1"
+      ],
+      "database": "concurrent_retry.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 1,
+          "title": "Read a chapter"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Read a chapter",
+        "--request-id",
+        "book-1"
+      ],
+      "database": "concurrent_retry.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 2,
+          "title": "Read a chapter"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Read a chapter",
+        "--request-id",
+        "book-1"
+      ],
+      "database": "concurrent_retry.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 3,
+          "title": "Read a chapter"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Read a chapter",
+        "--request-id",
+        "book-1"
+      ],
+      "database": "concurrent_retry.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 4,
+          "title": "Read a chapter"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Read a chapter",
+        "--request-id",
+        "book-1"
+      ],
+      "database": "concurrent_retry.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 5,
+          "title": "Read a chapter"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Read a chapter",
+        "--request-id",
+        "book-1"
+      ],
+      "database": "concurrent_retry.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 6,
+          "title": "Read a chapter"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Read a chapter",
+        "--request-id",
+        "book-1"
+      ],
+      "database": "concurrent_retry.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 7,
+          "title": "Read a chapter"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Read a chapter",
+        "--request-id",
+        "book-1"
+      ],
+      "database": "concurrent_retry.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 8,
+          "title": "Read a chapter"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Water plants",
+        "--request-id",
+        "same-key"
+      ],
+      "database": "conflict.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 1,
+          "title": "Water plants"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "Read a chapter",
+        "--request-id",
+        "same-key"
+      ],
+      "database": "conflict.sqlite",
+      "exit_code": 0,
+      "response": {
+        "created": true,
+        "task": {
+          "id": 2,
+          "title": "Read a chapter"
+        }
+      }
+    },
+    {
+      "arguments": [
+        "add",
+        "   ",
+        "--request-id",
+        "blank"
+      ],
+      "database": "validation.sqlite",
+      "exit_code": 2,
+      "response": {
+        "error": "invalid_input",
+        "message": "title must contain 1 to 120 non-NUL characters"
+      }
+    },
+    {
+      "arguments": [
+        "list"
+      ],
+      "database": "validation.sqlite",
+      "exit_code": 0,
+      "response": {
+        "tasks": []
+      }
+    }
+  ]
+}

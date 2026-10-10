@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "recorded_before_implementation_utc": "2026-10-10T04:20:05.620665+00:00",
+  "question": "Can a tiny local task list preserve acknowledged tasks and make repeated create requests safe across fresh processes?",
+  "hypothesis": "The SQLite implementation passes every declared claim with nonzero exercise counts. Deliberately volatile and duplicate-accepting implementations are rejected for the defects they contain.",
+  "claims": {
+    "restart": "An acknowledged task is visible unchanged to a fresh process.",
+    "retry": "An identical request ID and title return the same task, including after an ignored successful response and across eight concurrent processes.",
+    "conflict": "Reusing a request ID with a different title fails without changing the saved task.",
+    "validation": "An empty title fails without adding a task."
+  },
+  "measurements": {
+    "restart_rounds": 3,
+    "concurrent_requests": 8,
+    "independent_repeats": 2,
+    "required_exercise": [
+      "restart",
+      "ignored_response_retry",
+      "concurrent_retry",
+      "conflict",
+      "validation"
+    ]
+  },
+  "disconfirming": [
+    "Any acknowledged task disappears in a fresh process",
+    "A retry creates another task or changes its identity",
+    "Conflicting reuse changes existing data",
+    "Any required exercise count is zero",
+    "Either deliberately broken implementation passes its targeted claim",
+    "The same deterministic scenarios disagree between independent repeats"
+  ],
+  "scope": "Local process boundaries and SQLite commits only. No power-loss, filesystem-failure, throughput, security or AI-model-quality claim."
+}

@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "visually_inspected": [
+    "desktop.png",
+    "mobile.png",
+    "results-table.png"
+  ],
+  "article_result_run": "20261010T042729Z-633b0705",
+  "publication": "unpublished",
+  "limitations": [
+    "Local HTML preview is not the DEV renderer",
+    "One browser screenshot attempt failed transiently; the retry completed",
+    "Publisher full-page fetch was unavailable; earlier terminology is supported by indexed publisher catalog"
+  ],
+  "files": "Synthetic example code and newly generated evidence only"
+}

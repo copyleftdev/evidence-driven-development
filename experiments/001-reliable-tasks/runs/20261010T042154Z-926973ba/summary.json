@@ -1,0 +1,63 @@
+{
+  "independent_repeats": 2,
+  "promotion_gate_passed": true,
+  "run_id": "20261010T042154Z-926973ba",
+  "scope": "Local process boundaries and SQLite commits only. No power-loss, filesystem-failure, throughput, security or AI-model-quality claim.",
+  "variants": {
+    "duplicates": {
+      "claims": {
+        "concurrent_retry": false,
+        "conflict": false,
+        "ignored_response_retry": false,
+        "restart": true,
+        "validation": true
+      },
+      "exercised": {
+        "concurrent_retry": 8,
+        "conflict": 1,
+        "ignored_response_retry": 1,
+        "restart": 3,
+        "validation": 1
+      },
+      "passed": false,
+      "stable": true
+    },
+    "sqlite": {
+      "claims": {
+        "concurrent_retry": true,
+        "conflict": true,
+        "ignored_response_retry": true,
+        "restart": true,
+        "validation": true
+      },
+      "exercised": {
+        "concurrent_retry": 8,
+        "conflict": 1,
+        "ignored_response_retry": 1,
+        "restart": 3,
+        "validation": 1
+      },
+      "passed": true,
+      "stable": true
+    },
+    "volatile": {
+      "claims": {
+        "concurrent_retry": false,
+        "conflict": false,
+        "ignored_response_retry": false,
+        "restart": false,
+        "validation": true
+      },
+      "exercised": {
+        "concurrent_retry": 8,
+        "conflict": 1,
+        "ignored_response_retry": 1,
+        "restart": 1,
+        "validation": 1
+      },
+      "passed": false,
+      "stable": true
+    }
+  },
+  "zero_exercise_rejected": true
+}

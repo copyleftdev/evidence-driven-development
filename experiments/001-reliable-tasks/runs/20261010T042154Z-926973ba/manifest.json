@@ -1,0 +1,13 @@
+{
+  "command": "python3 scripts/prove.py",
+  "python": "3.14.4",
+  "source_sha256": {
+    "experiments/001-reliable-tasks/experiment.json": "e0e57c1f16f7973b2679465bc5f410c70f02787a0c3f932f9e284b4949f3bd25",
+    "lab/broken_tasks.py": "5531f997437056d1f262e2649d0abdf49d742ed51b82dec547dcc9dffbb1b5ef",
+    "scripts/prove.py": "ed2aa2522fcad3a034c16e1911607e3e54b6630e3d947f99355017839883b9ba",
+    "tiny_tasks/__init__.py": "f636cfa747754e814fce414583adf74fbb6640e3327017a03d47d2b99af31532",
+    "tiny_tasks/__main__.py": "a4cc1686d9714be730101e64756d8599e5309c35a6c83a39d950e4a5d2e9d8a0",
+    "tiny_tasks/store.py": "f64952aca875cd7c11da2e5756b4cc26f2e1e9728d83425cf4b79b24b74a5f62"
+  },
+  "sqlite": "3.46.1"
+}

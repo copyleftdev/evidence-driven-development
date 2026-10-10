@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "public_files_scanned": 38,
+  "product_identifiers_found": 0,
+  "credential_patterns_found": 0,
+  "source_hashes_match_corrected_run": true,
+  "portable_test_exit": 0,
+  "portable_proof_exit": 0,
+  "portable_run": "experiments/001-reliable-tasks/runs/20261010T042935Z-a7cca3e6",
+  "portable_python": "3.14.4",
+  "portable_sqlite": "3.46.1",
+  "scope": "Known identifier/pattern scan plus editorial review; not a universal disclosure or security guarantee."
+}

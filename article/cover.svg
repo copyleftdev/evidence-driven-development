@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420" viewBox="0 0 1000 420" role="img" aria-labelledby="title desc">
+<title id="title">Evidence-driven development: give your agent something to prove</title>
+<desc id="desc">An editorial cover with three evidence receipts labeled claim, experiment and decision.</desc>
+<rect width="1000" height="420" fill="#f3efe5"/>
+<path d="M38 44H962" stroke="#282723" stroke-width="2"/>
+<text x="40" y="80" fill="#aa432a" font-family="Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="3">EVIDENCE-DRIVEN DEVELOPMENT</text>
+<text x="38" y="158" fill="#282723" font-family="Georgia,serif" font-size="58">Give your agent</text>
+<text x="38" y="228" fill="#282723" font-family="Georgia,serif" font-size="58">something to prove.</text>
+<text x="42" y="277" fill="#5c5a53" font-family="Arial,sans-serif" font-size="19">A small app. A falsifiable claim. A repeatable result.</text>
+<rect x="42" y="320" width="278" height="39" rx="4" fill="#282723"/>
+<text x="58" y="345" fill="#fffdf8" font-family="monospace" font-size="14">python3 scripts/prove.py</text>
+<g transform="translate(708 106) rotate(6 113 110)"><rect x="12" y="12" width="218" height="236" fill="#ded6c5"/><rect width="218" height="236" fill="#fffdf8" stroke="#282723"/>
+<text x="20" y="34" font-family="monospace" font-size="12" fill="#aa432a">RUN / 001</text>
+<path d="M20 48H198" stroke="#d3cabc"/>
+<text x="20" y="82" font-family="Arial,sans-serif" font-size="17" fill="#282723">01  Claim</text>
+<text x="20" y="126" font-family="Arial,sans-serif" font-size="17" fill="#282723">02  Experiment</text>
+<text x="20" y="170" font-family="Arial,sans-serif" font-size="17" fill="#282723">03  Decision</text>
+<path d="M20 190H198" stroke="#d3cabc"/>
+<circle cx="27" cy="214" r="5" fill="#35765a"/><text x="42" y="219" font-family="monospace" font-size="12" fill="#35765a">evidence retained</text></g>
+<text x="42" y="395" fill="#777167" font-family="Arial,sans-serif" font-size="11" letter-spacing="1.5">AN AGENT-ASSISTED DEVELOPMENT TUTORIAL</text>
+</svg>

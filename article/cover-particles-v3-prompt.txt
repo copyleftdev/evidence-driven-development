@@ -1,0 +1,12 @@
+Generation mode: built-in image_gen (edit of cover-particles-v2.png)
+
+Edit the supplied DEV.to cover artwork to add exceptionally clean, crisp, sleek editorial typography. Preserve the original panoramic aspect ratio, deep midnight background, cyan and gold particle streams and connected evidence nodes; keep the artwork recognizable and its vibrant clarity. This is a refined typography pass, not a new illustration.
+
+Use the generous dark negative space above the central particle ribbons for a beautifully balanced title, with comfortable top margin. Set the exact title on two centered lines:
+"Evidence-Driven"
+"Development"
+Use a refined modern Swiss grotesk sans serif, medium-to-semibold weight, impeccable optical kerning, restrained tight tracking, crisp warm-white letters, substantial readable scale, no glow or outlines. The top title block should fit in the central approximately 65% width, top approximately 28% height, avoiding the bright right-hand constellation. Keep generous breathing space around the typography and the trajectories immediately below it. Gently adjust only local background brightness if needed for contrast.
+
+In the quiet dark space below the stream, centered around 83% height, add the exact supporting line:
+"Give your coding agent something to prove."
+Use the same sans serif at a clearly smaller, comfortably readable size, regular weight, pale cool gray, careful spacing. Maintain hierarchy: title first, sculptural particles second, supporting line third. Premium technology journal cover, elegant and confident. Flat precise typography against dimensional particles. No additional text, logos, labels, borders, UI, gradients inside letters, or watermarks. Spell all text exactly.
