@@ -1,0 +1,24 @@
+{
+  "repository": "https://github.com/copyleftdev/evidence-driven-development",
+  "source_commit": "1f03111db02d359b24602992eddae60122d49d74",
+  "cover_image": "https://raw.githubusercontent.com/copyleftdev/evidence-driven-development/1f03111db02d359b24602992eddae60122d49d74/article/cover-particles-v3.png",
+  "cover_local": "article/cover-particles-v3.png",
+  "gists": [
+    {
+      "url": "https://gist.github.com/copyleftdev/01e8f0e2b919392f1a7a1a6fc1fa8665",
+      "source": "experiments/001-reliable-tasks/experiment.json",
+      "language": "json",
+      "title": "Experiment contract",
+      "sha256": "e0e57c1f16f7973b2679465bc5f410c70f02787a0c3f932f9e284b4949f3bd25",
+      "source_url": "https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/experiment.json"
+    },
+    {
+      "url": "https://gist.github.com/copyleftdev/0cf6b00eb0ec5e01f2ab3c5cabee8328",
+      "source": "tiny_tasks/store.py",
+      "language": "python",
+      "title": "SQLite implementation",
+      "sha256": "f64952aca875cd7c11da2e5756b4cc26f2e1e9728d83425cf4b79b24b74a5f62",
+      "source_url": "https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/tiny_tasks/store.py"
+    }
+  ]
+}

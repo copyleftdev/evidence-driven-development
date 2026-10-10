@@ -4,12 +4,16 @@ A standalone companion project for **Evidence-Driven Development: Give Your Codi
 Something to Prove**. A tiny local task list teaches explicit claims, negative controls,
 fresh-process experiments, nonzero exercise gates and reproducible evidence.
 
+![Evidence-Driven Development: Give your coding agent something to prove.](article/cover-particles-v3.png)
+
 ## Run
 
 Requires Python 3.10+ with its standard SQLite module. No application dependencies,
 API keys, model account, network service or cloud resources are required.
 
 ```sh
+git clone https://github.com/copyleftdev/evidence-driven-development.git
+cd evidence-driven-development
 python3 -m tiny_tasks add "Water plants" --request-id plant-1
 python3 -m tiny_tasks add "Water plants" --request-id plant-1
 python3 -m tiny_tasks list
@@ -46,4 +50,6 @@ tolerance, scalability, security or comparative model quality.
 
 All example data and captured results were created specifically for this project.
 The `lab/` implementations are deliberately broken controls and never used by the normal CLI.
-The source has not been published and no distribution license has been selected yet.
+The companion source and assets are public on GitHub; the DEV.to article remains an unpublished draft.
+No distribution license has been selected. Public availability does not supply a reuse license.
+See [the asset index](article/assets.json) for the cover, gist mirrors and commit-pinned source links.

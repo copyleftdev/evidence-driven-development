@@ -1,0 +1,29 @@
+{
+  "repository": "https://github.com/copyleftdev/evidence-driven-development",
+  "cover_hash_matches": true,
+  "gists": [
+    {
+      "url": "https://gist.github.com/copyleftdev/01e8f0e2b919392f1a7a1a6fc1fa8665",
+      "revision": "5c458c1254b4bea4058e1ef5cab0178f5e8e0911",
+      "sha256_matches": true,
+      "public": true
+    },
+    {
+      "url": "https://gist.github.com/copyleftdev/0cf6b00eb0ec5e01f2ab3c5cabee8328",
+      "revision": "2330e594c2c9059a94970243d06a9af13776c838",
+      "sha256_matches": true,
+      "public": true
+    }
+  ],
+  "verified_urls": [
+    "https://raw.githubusercontent.com/copyleftdev/evidence-driven-development/1f03111db02d359b24602992eddae60122d49d74/article/cover-particles-v3.png",
+    "https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/experiment.json",
+    "https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/runs/20261010T042729Z-633b0705/manifest.json",
+    "https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/runs/20261010T042729Z-633b0705/summary.json",
+    "https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/tiny_tasks/store.py",
+    "https://github.com/copyleftdev/evidence-driven-development/tree/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/runs/20261010T042729Z-633b0705"
+  ],
+  "recorded_source_hashes_match": true,
+  "devto_article_uploaded": false,
+  "scope": "Anonymous HTTP checks and content hash comparisons. Actual DEV renderer preview remains an author step."
+}

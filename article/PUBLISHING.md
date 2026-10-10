@@ -1,37 +1,44 @@
-# Author handoff
+# DEV.to publishing handoff
 
-The article is a draft. Nothing has been uploaded or published.
+The companion repository and two gist assets are public. The DEV.to article itself remains
+an unpublished local draft; no article has been uploaded to DEV.to by this workflow.
 
-## Files
+## Hosted assets
 
-- `devto.md`: DEV-compatible front matter and article body.
-- `preview.html`: local editorial reading copy; contains no third-party assets or scripts.
-- `cover.svg` and `cover.png`: original 1000 × 420 artwork for an optional DEV cover.
-- `research.md`: primary-source attribution, terminology and retrieval limitations.
-- The project root contains the runnable companion and actual evidence directories.
+- [Companion repository](https://github.com/copyleftdev/evidence-driven-development): code, synthetic evidence, artwork and prompts.
+- [Selected V3 cover](https://raw.githubusercontent.com/copyleftdev/evidence-driven-development/1f03111db02d359b24602992eddae60122d49d74/article/cover-particles-v3.png): public PNG, pinned to the source commit.
+- [Experiment contract gist](https://gist.github.com/copyleftdev/01e8f0e2b919392f1a7a1a6fc1fa8665).
+- [SQLite implementation gist](https://gist.github.com/copyleftdev/0cf6b00eb0ec5e01f2ab3c5cabee8328).
+- `assets.json`: canonical URLs, local source paths and SHA-256 values for the gist mirrors.
 
-## Before public release
+The V2 artwork, V3 typography version, their generation prompts and earlier vector cover
+are all retained. The article uses V3. Cover art was generated with an image-generation tool.
 
-1. Review first-person wording and choose the final author attribution.
-2. Choose a distribution license and publish the standalone source repository if desired.
-   No public repository URL exists yet. Add that real URL near the article's setup commands.
-3. Paste `devto.md` into DEV's Markdown editor with `published: false`. Upload `cover.png`
-   if using the cover, then use DEV's returned URL rather than a local filesystem path.
-4. Preview code, tables, links and mobile reading in DEV. This project's HTML preview is
-   an editorial aid, not a screenshot of DEV's renderer.
-5. Publish only after the author's final review. Draft URLs can be shareable; uploading
-   a draft is still an external disclosure and has not been performed here.
+## Move the draft into DEV
 
-The tutorial is a fresh teaching example with synthetic task names and new measurements.
-Do not add private screenshots, internal hostnames, original product details or copied
-operational logs during editorial revisions.
+1. Paste `devto.md` into DEV's Markdown editor. Keep `published: false` until ready.
+2. The front matter already includes the hosted `cover_image` URL. In the rich editor,
+   select the matching cover separately if that editor does not import the front matter.
+3. Preview the repository card and both gist embeds in DEV. The article uses the universal
+   `{% embed URL %}` syntax supported by the [DEV editor guide](https://dev.to/p/editor_guide).
+4. Check code scrolling, tables, cover cropping and mobile reading in DEV's own preview.
+5. Review author wording and decide the distribution license before presenting the code
+   as licensed open source. A public repository alone does not supply a reuse license.
+6. Publish the article only when the author requests it.
 
-## Rebuild the local reading copy
+The source checkout, cover and recorded results use commit `1f03111db02d359b24602992eddae60122d49d74`. The gist URLs
+are editable mirrors, so preserve their published contents; link a new revision when
+changing the teaching example. Pinned repository copies remain the reference.
+
+## Local reading copy
+
+`preview.html` uses the local V3 cover and locally rendered snapshots of the gist source.
+It loads no third-party scripts or styles. It does not reproduce DEV's renderer. Original
+QA files describe the earlier layout; publication QA is recorded separately.
 
 The app and evidence runner use only Python's standard library. Optional article rendering
-uses Python-Markdown; optional SVG-to-PNG conversion uses CairoSVG. The generated HTML
-and PNG are included so readers do not need those packages to use the project.
+uses Python-Markdown. Run `python3 scripts/render_article.py` to rebuild the reading copy.
+No image conversion package is needed for the selected PNG cover.
 
-```sh
-python3 scripts/render_article.py
-```
+Use only this project's synthetic content during editorial changes. Do not add private
+screenshots, internal hostnames, unrelated product details or operational logs.

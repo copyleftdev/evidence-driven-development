@@ -2,6 +2,8 @@
 """Optional editorial build; not needed to run the application or experiments."""
 from html import escape
 from pathlib import Path
+import hashlib
+import json
 import re
 
 import markdown
@@ -10,6 +12,26 @@ ROOT = Path(__file__).resolve().parents[1]
 raw = (ROOT / "article/devto.md").read_text()
 _, front, body = raw.split("---", 2)
 title = re.search(r'^title: "(.+)"$', front, re.M)[1]
+assets = json.loads((ROOT / "article/assets.json").read_text())
+snapshots = {item["url"]: item for item in assets["gists"]}
+
+
+def render_embed(match):
+    url = match[1]
+    if url == assets["repository"]:
+        return f'> **Companion repository** · [Open on GitHub]({url})\n'
+    item = snapshots[url]
+    source = (ROOT / item["source"]).read_bytes()
+    if hashlib.sha256(source).hexdigest() != item["sha256"]:
+        raise ValueError(f'Embed snapshot changed: {item["source"]}')
+    return (
+        f'> **{item["title"]}** · [View gist]({url}) · '
+        f'[Pinned source]({item["source_url"]})\n\n'
+        f'```{item["language"]}\n{source.decode().rstrip()}\n```\n'
+    )
+
+
+body = re.sub(r"^\{% embed (https://[^\s]+) %\}$", render_embed, body, flags=re.M)
 rendered = markdown.markdown(body, extensions=["fenced_code", "tables"])
 css = """
 :root{color-scheme:light;--ink:#282723;--muted:#6d685f;--paper:#faf8f2;--accent:#aa432a}
@@ -35,12 +57,7 @@ html = f'''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="view
 <header><div class="eyebrow">A PRACTICAL TUTORIAL</div><h1>{escape(title)}</h1>
 <p class="dek">Build a small app, challenge its promises, and keep the evidence another developer needs to reproduce the result.</p>
 <div class="meta">Python + SQLite · No model account required · Original teaching example</div>
-<img class="cover" src="cover.svg" alt="Give your agent something to prove: claim, experiment, decision"></header>
+<img class="cover" src="cover-particles-v3.png" alt="Evidence-Driven Development. Cyan and gold particles converge into connected evidence. Give your coding agent something to prove."></header>
 <main>{rendered}</main><footer>Independent teaching project · The article remains a draft.</footer></html>'''
 (ROOT / "article/preview.html").write_text(html)
-try:
-    import cairosvg
-    cairosvg.svg2png(url=str(ROOT / "article/cover.svg"), write_to=str(ROOT / "article/cover.png"))
-except ImportError:
-    print("HTML rendered. Optional cover.png conversion requires CairoSVG.")
 print("Rendered article/preview.html")

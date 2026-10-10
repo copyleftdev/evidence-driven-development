@@ -4,7 +4,8 @@
 
 A readable article and small independent application that demonstrate evidence-driven
 development with real reproducible outputs. Authorize local research, drafting, code and
-verification. No public publishing, paid services or external account changes.
+verification. The author subsequently authorized publishing the companion and its assets
+on the `copyleftdev` GitHub profile and adding gist embeds to the DEV.to draft.
 
 ## Progress
 
@@ -25,8 +26,10 @@ Every required SQLite scenario was exercised. Zero activity was rejected.
 
 ## Handoff
 
-Local draft and companion are complete. Keep the article unpublished. Hosting URL, final author
-voice and a distribution license need an editorial decision before public release.
+Companion repository: https://github.com/copyleftdev/evidence-driven-development. The cover and evidence links use a fixed source revision.
+Two public gists mirror the contract and implementation for DEV embeds. Keep the article
+unpublished on DEV.to until the author requests publication. A distribution license remains
+unselected; public hosting does not imply a reuse grant.
 
 ## Verification
 
@@ -34,3 +37,10 @@ Nine tests passed. The corrected experiment passed again from a fresh directory 
 cleared environment. Desktop/mobile previews have no document-level horizontal overflow.
 The article and package passed a known-identifier and credential-pattern scan plus
 editorial review. See `article/qa/`; these checks are bounded, not a universal guarantee.
+
+## Public asset delivery
+
+- [x] Publish standalone source, synthetic evidence, artwork and prompts under `copyleftdev`.
+- [x] Create contract and implementation gist embeds with matching source hashes.
+- [x] Add hosted cover, clone instructions and fixed-revision evidence links to the article.
+- [x] Keep a local HTML preview with offline snapshots of the embedded source.

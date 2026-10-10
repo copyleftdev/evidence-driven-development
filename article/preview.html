@@ -21,7 +21,7 @@ footer{border-top:1px solid #d7cebf;padding:28px;text-align:center;font:12px sys
 <header><div class="eyebrow">A PRACTICAL TUTORIAL</div><h1>Evidence-Driven Development: Give Your Coding Agent Something to Prove</h1>
 <p class="dek">Build a small app, challenge its promises, and keep the evidence another developer needs to reproduce the result.</p>
 <div class="meta">Python + SQLite · No model account required · Original teaching example</div>
-<img class="cover" src="cover.svg" alt="Give your agent something to prove: claim, experiment, decision"></header>
+<img class="cover" src="cover-particles-v3.png" alt="Evidence-Driven Development. Cyan and gold particles converge into connected evidence. Give your coding agent something to prove."></header>
 <main><p>An AI coding agent finishes the feature. The tests pass. The explanation sounds reasonable.</p>
 <p>Then someone asks a small question: <strong>“What happens if I run that request again?”</strong></p>
 <p>That question can change the shape of a project. Now “done” needs to mean something observable. The answer needs an experiment, and the experiment needs a way to be wrong.</p>
@@ -34,11 +34,17 @@ footer{border-top:1px solid #d7cebf;padding:28px;text-align:center;font:12px sys
 <p>TDD still gives us a useful red–green–refactor loop. BDD helps express behavior through examples people can discuss. In this tutorial, EDD names the discipline of keeping the claim, execution conditions, observed result and resulting decision connected. Those practices fit together. <a href="https://agilealliance.org/glossary/tdd/">TDD</a>, <a href="https://agilealliance.org/glossary/given-when-then/">Given–When–Then</a>.</p>
 <h2>A small application with a real promise</h2>
 <p>Our app is <strong>Tiny Tasks</strong>. It adds tasks and lists them. Python and SQLite are enough; the application and experiment runner use only the Python standard library. Use Python 3.10 or newer with SQLite support.</p>
-<p>The companion project contains the complete source and the evidence runner. From its directory:</p>
-<pre><code class="language-sh">python3 -m tiny_tasks add &quot;Water plants&quot; --request-id plant-1
+<p>The <a href="https://github.com/copyleftdev/evidence-driven-development">companion repository</a> contains the complete source, cover artwork and recorded evidence. Clone it to follow along:</p>
+<blockquote>
+<p><strong>Companion repository</strong> · <a href="https://github.com/copyleftdev/evidence-driven-development">Open on GitHub</a></p>
+</blockquote>
+<pre><code class="language-sh">git clone https://github.com/copyleftdev/evidence-driven-development.git
+cd evidence-driven-development
+git checkout 1f03111db02d359b24602992eddae60122d49d74
+python3 -m tiny_tasks add &quot;Water plants&quot; --request-id plant-1
 python3 -m tiny_tasks list
 </code></pre>
-<p>The first command returns a task. The second starts a new process and reads it back. The default database lives at <code>.local/tasks.sqlite</code>.</p>
+<p>The checkout selects the source revision used in this article. The <code>add</code> command returns a task. The <code>list</code> command starts a new process and reads it back. The default database lives at <code>.local/tasks.sqlite</code>.</p>
 <p>The request ID belongs to the user's intended action. When the caller retries that same action, it sends the same ID. A genuinely new task gets a new ID—even if the title happens to match.</p>
 <p>That small distinction gives us something worth proving.</p>
 <h2>1. Write a claim that can lose</h2>
@@ -70,6 +76,44 @@ python3 -m tiny_tasks list
 </tr>
 </tbody>
 </table>
+<p>The complete contract is embedded here, with a <a href="https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/experiment.json">commit-pinned copy</a> in the repository:</p>
+<blockquote>
+<p><strong>Experiment contract</strong> · <a href="https://gist.github.com/copyleftdev/01e8f0e2b919392f1a7a1a6fc1fa8665">View gist</a> · <a href="https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/experiment.json">Pinned source</a></p>
+</blockquote>
+<pre><code class="language-json">{
+  &quot;version&quot;: 1,
+  &quot;recorded_before_implementation_utc&quot;: &quot;2026-10-10T04:20:05.620665+00:00&quot;,
+  &quot;question&quot;: &quot;Can a tiny local task list preserve acknowledged tasks and make repeated create requests safe across fresh processes?&quot;,
+  &quot;hypothesis&quot;: &quot;The SQLite implementation passes every declared claim with nonzero exercise counts. Deliberately volatile and duplicate-accepting implementations are rejected for the defects they contain.&quot;,
+  &quot;claims&quot;: {
+    &quot;restart&quot;: &quot;An acknowledged task is visible unchanged to a fresh process.&quot;,
+    &quot;retry&quot;: &quot;An identical request ID and title return the same task, including after an ignored successful response and across eight concurrent processes.&quot;,
+    &quot;conflict&quot;: &quot;Reusing a request ID with a different title fails without changing the saved task.&quot;,
+    &quot;validation&quot;: &quot;An empty title fails without adding a task.&quot;
+  },
+  &quot;measurements&quot;: {
+    &quot;restart_rounds&quot;: 3,
+    &quot;concurrent_requests&quot;: 8,
+    &quot;independent_repeats&quot;: 2,
+    &quot;required_exercise&quot;: [
+      &quot;restart&quot;,
+      &quot;ignored_response_retry&quot;,
+      &quot;concurrent_retry&quot;,
+      &quot;conflict&quot;,
+      &quot;validation&quot;
+    ]
+  },
+  &quot;disconfirming&quot;: [
+    &quot;Any acknowledged task disappears in a fresh process&quot;,
+    &quot;A retry creates another task or changes its identity&quot;,
+    &quot;Conflicting reuse changes existing data&quot;,
+    &quot;Any required exercise count is zero&quot;,
+    &quot;Either deliberately broken implementation passes its targeted claim&quot;,
+    &quot;The same deterministic scenarios disagree between independent repeats&quot;
+  ],
+  &quot;scope&quot;: &quot;Local process boundaries and SQLite commits only. No power-loss, filesystem-failure, throughput, security or AI-model-quality claim.&quot;
+}
+</code></pre>
 <p>The repository records those claims in <code>experiments/001-reliable-tasks/experiment.json</code>. It also declares three restart rounds, eight concurrent retry processes, two independent repetitions, and the scenarios that must actually execute.</p>
 <p>These numbers are a small teaching workload. They are not a statistical reliability estimate or a throughput target.</p>
 <p>Before asking an agent for code, give it this kind of task:</p>
@@ -105,35 +149,71 @@ Report which claims passed, which failed, and what was not tested.
 <h2>3. Implement the smallest useful design</h2>
 <p>Tiny Tasks stores each task alongside its request ID. A unique database constraint prevents two stored rows from sharing that ID.</p>
 <p>Creation uses one transaction. It looks for the ID, compares the normalized title if the ID exists, and inserts only when it is new. The command returns success after the transaction commits.</p>
-<p>The central part of <code>tiny_tasks/store.py</code> looks like this:</p>
-<pre><code class="language-python">db.execute(&quot;BEGIN IMMEDIATE&quot;)
-try:
-    old = db.execute(
-        &quot;SELECT id, title FROM tasks WHERE request_id = ?&quot;,
-        (request_id,),
-    ).fetchone()
+<p>The complete <code>tiny_tasks/store.py</code> implementation is embedded below. You can also read the <a href="https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/tiny_tasks/store.py">commit-pinned source</a>.</p>
+<blockquote>
+<p><strong>SQLite implementation</strong> · <a href="https://gist.github.com/copyleftdev/0cf6b00eb0ec5e01f2ab3c5cabee8328">View gist</a> · <a href="https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/tiny_tasks/store.py">Pinned source</a></p>
+</blockquote>
+<pre><code class="language-python">&quot;&quot;&quot;Task creation with durable, payload-bound request IDs.&quot;&quot;&quot;
+from contextlib import closing
+from pathlib import Path
+import re
+import sqlite3
 
-    if old:
-        if old[&quot;title&quot;] != title:
-            raise Conflict(&quot;request ID was already used with another title&quot;)
-        result = {&quot;task&quot;: dict(old), &quot;created&quot;: False}
-    else:
-        cursor = db.execute(
-            &quot;INSERT INTO tasks(request_id, title) VALUES (?, ?)&quot;,
-            (request_id, title),
-        )
-        result = {
-            &quot;task&quot;: {&quot;id&quot;: cursor.lastrowid, &quot;title&quot;: title},
-            &quot;created&quot;: True,
-        }
 
-    db.execute(&quot;COMMIT&quot;)
-    return result
-except BaseException:
-    db.execute(&quot;ROLLBACK&quot;)
-    raise
+class Conflict(ValueError):
+    pass
+
+
+def validate(title, request_id):
+    title = title.strip()
+    if not title or len(title) &gt; 120 or &quot;\x00&quot; in title:
+        raise ValueError(&quot;title must contain 1 to 120 non-NUL characters&quot;)
+    if not re.fullmatch(r&quot;[A-Za-z0-9_-]{1,80}&quot;, request_id):
+        raise ValueError(&quot;request ID must contain 1 to 80 letters, digits, underscores or hyphens&quot;)
+    return title
+
+
+class Store:
+    def __init__(self, path):
+        self.path = Path(path)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        with closing(self.connect()) as db:
+            db.execute(&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS tasks (
+                id INTEGER PRIMARY KEY,
+                request_id TEXT NOT NULL UNIQUE,
+                title TEXT NOT NULL
+            )&quot;&quot;&quot;)
+
+    def connect(self):
+        db = sqlite3.connect(self.path, timeout=10, isolation_level=None)
+        db.row_factory = sqlite3.Row
+        db.execute(&quot;PRAGMA synchronous=FULL&quot;)
+        return db
+
+    def add(self, title, request_id):
+        title = validate(title, request_id)
+        with closing(self.connect()) as db:
+            db.execute(&quot;BEGIN IMMEDIATE&quot;)
+            try:
+                old = db.execute(&quot;SELECT id, title FROM tasks WHERE request_id = ?&quot;, (request_id,)).fetchone()
+                if old:
+                    if old[&quot;title&quot;] != title:
+                        raise Conflict(&quot;request ID was already used with another title&quot;)
+                    result = {&quot;task&quot;: dict(old), &quot;created&quot;: False}
+                else:
+                    cursor = db.execute(&quot;INSERT INTO tasks(request_id, title) VALUES (?, ?)&quot;, (request_id, title))
+                    result = {&quot;task&quot;: {&quot;id&quot;: cursor.lastrowid, &quot;title&quot;: title}, &quot;created&quot;: True}
+                db.execute(&quot;COMMIT&quot;)
+                return result
+            except BaseException:
+                db.execute(&quot;ROLLBACK&quot;)
+                raise
+
+    def list(self):
+        with closing(self.connect()) as db:
+            return [dict(row) for row in db.execute(&quot;SELECT id, title FROM tasks ORDER BY id&quot;)]
 </code></pre>
-<p>“Normalized” has an explicit meaning here: the app removes leading and trailing whitespace before comparing titles. The database connection, schema and validation live in the complete source; the excerpt shows the transaction boundary.</p>
+<p>“Normalized” has an explicit meaning here: the app removes leading and trailing whitespace before comparing titles. The <code>add</code> method shows the transaction boundary; validation, connection setup and listing are included so you can inspect the whole example.</p>
 <p>That boundary matters because checking in one transaction and inserting later would leave room for another process to intervene. SQLite documents the write-transaction behavior of <code>BEGIN IMMEDIATE</code> in its <a href="https://www.sqlite.org/lang_transaction.html">transaction reference</a>. Still, plausible code is only a candidate explanation. We have to run the workload we promised to support.</p>
 <h2>4. Cross the boundary you are making a claim about</h2>
 <p>A test can create a <code>Store</code>, add a task and immediately list it. That is useful. It does not establish what happens in a new process.</p>
@@ -216,7 +296,7 @@ python3 scripts/prove.py
 <li>A response trace and scenario outcomes for each implementation and repetition.</li>
 <li>A summary with the overall decision and its scope.</li>
 </ul>
-<p>The captured run used for this article is <code>20261010T042729Z-633b0705</code>. Your run will have its own ID. The project preserves the original directory so you can inspect the evidence behind this table.</p>
+<p>The captured run used for this article is <code>20261010T042729Z-633b0705</code>. Your run will have its own ID. The project preserves the <a href="https://github.com/copyleftdev/evidence-driven-development/tree/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/runs/20261010T042729Z-633b0705">original run directory</a> so you can inspect the evidence behind this table, including its <a href="https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/runs/20261010T042729Z-633b0705/summary.json">summary</a> and <a href="https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/runs/20261010T042729Z-633b0705/manifest.json">source manifest</a>.</p>
 <p>The hashes help identify the source files used in a run. They do not establish who performed it, and someone who can rewrite both the files and their manifest can forge a matching set. This is reproducible local evidence, not a signed attestation system.</p>
 <h2>7. Make a decision the evidence supports</h2>
 <p>We can now choose SQLite for this local application's declared process and retry behavior.</p>

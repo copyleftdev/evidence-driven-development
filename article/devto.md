@@ -1,6 +1,7 @@
 ---
 title: "Evidence-Driven Development: Give Your Coding Agent Something to Prove"
 published: false
+cover_image: "https://raw.githubusercontent.com/copyleftdev/evidence-driven-development/1f03111db02d359b24602992eddae60122d49d74/article/cover-particles-v3.png"
 description: "Build a tiny task list, break it on purpose, and leave behind evidence another developer can reproduce."
 tags: ai, testing, tutorial, python
 ---
@@ -29,14 +30,19 @@ TDD still gives us a useful red–green–refactor loop. BDD helps express behav
 
 Our app is **Tiny Tasks**. It adds tasks and lists them. Python and SQLite are enough; the application and experiment runner use only the Python standard library. Use Python 3.10 or newer with SQLite support.
 
-The companion project contains the complete source and the evidence runner. From its directory:
+The [companion repository](https://github.com/copyleftdev/evidence-driven-development) contains the complete source, cover artwork and recorded evidence. Clone it to follow along:
+
+{% embed https://github.com/copyleftdev/evidence-driven-development %}
 
 ```sh
+git clone https://github.com/copyleftdev/evidence-driven-development.git
+cd evidence-driven-development
+git checkout 1f03111db02d359b24602992eddae60122d49d74
 python3 -m tiny_tasks add "Water plants" --request-id plant-1
 python3 -m tiny_tasks list
 ```
 
-The first command returns a task. The second starts a new process and reads it back. The default database lives at `.local/tasks.sqlite`.
+The checkout selects the source revision used in this article. The `add` command returns a task. The `list` command starts a new process and reads it back. The default database lives at `.local/tasks.sqlite`.
 
 The request ID belongs to the user's intended action. When the caller retries that same action, it sends the same ID. A genuinely new task gets a new ID—even if the title happens to match.
 
@@ -54,6 +60,10 @@ Here is the experiment contract we wrote before implementing the application:
 | Repeating a create request returns the original task | A retry creates another task or returns a different ID |
 | A request ID cannot silently acquire a different meaning | Reusing it with a different title succeeds or changes saved data |
 | Invalid input leaves the list alone | An empty title adds a task |
+
+The complete contract is embedded here, with a [commit-pinned copy](https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/experiment.json) in the repository:
+
+{% embed https://gist.github.com/copyleftdev/01e8f0e2b919392f1a7a1a6fc1fa8665 %}
 
 The repository records those claims in `experiments/001-reliable-tasks/experiment.json`. It also declares three restart rounds, eight concurrent retry processes, two independent repetitions, and the scenarios that must actually execute.
 
@@ -108,38 +118,11 @@ Tiny Tasks stores each task alongside its request ID. A unique database constrai
 
 Creation uses one transaction. It looks for the ID, compares the normalized title if the ID exists, and inserts only when it is new. The command returns success after the transaction commits.
 
-The central part of `tiny_tasks/store.py` looks like this:
+The complete `tiny_tasks/store.py` implementation is embedded below. You can also read the [commit-pinned source](https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/tiny_tasks/store.py).
 
-```python
-db.execute("BEGIN IMMEDIATE")
-try:
-    old = db.execute(
-        "SELECT id, title FROM tasks WHERE request_id = ?",
-        (request_id,),
-    ).fetchone()
+{% embed https://gist.github.com/copyleftdev/0cf6b00eb0ec5e01f2ab3c5cabee8328 %}
 
-    if old:
-        if old["title"] != title:
-            raise Conflict("request ID was already used with another title")
-        result = {"task": dict(old), "created": False}
-    else:
-        cursor = db.execute(
-            "INSERT INTO tasks(request_id, title) VALUES (?, ?)",
-            (request_id, title),
-        )
-        result = {
-            "task": {"id": cursor.lastrowid, "title": title},
-            "created": True,
-        }
-
-    db.execute("COMMIT")
-    return result
-except BaseException:
-    db.execute("ROLLBACK")
-    raise
-```
-
-“Normalized” has an explicit meaning here: the app removes leading and trailing whitespace before comparing titles. The database connection, schema and validation live in the complete source; the excerpt shows the transaction boundary.
+“Normalized” has an explicit meaning here: the app removes leading and trailing whitespace before comparing titles. The `add` method shows the transaction boundary; validation, connection setup and listing are included so you can inspect the whole example.
 
 That boundary matters because checking in one transaction and inserting later would leave room for another process to intervene. SQLite documents the write-transaction behavior of `BEGIN IMMEDIATE` in its [transaction reference](https://www.sqlite.org/lang_transaction.html). Still, plausible code is only a candidate explanation. We have to run the workload we promised to support.
 
@@ -215,7 +198,7 @@ You will find a new directory under `experiments/001-reliable-tasks/runs/`. It c
 - A response trace and scenario outcomes for each implementation and repetition.
 - A summary with the overall decision and its scope.
 
-The captured run used for this article is `20261010T042729Z-633b0705`. Your run will have its own ID. The project preserves the original directory so you can inspect the evidence behind this table.
+The captured run used for this article is `20261010T042729Z-633b0705`. Your run will have its own ID. The project preserves the [original run directory](https://github.com/copyleftdev/evidence-driven-development/tree/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/runs/20261010T042729Z-633b0705) so you can inspect the evidence behind this table, including its [summary](https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/runs/20261010T042729Z-633b0705/summary.json) and [source manifest](https://github.com/copyleftdev/evidence-driven-development/blob/1f03111db02d359b24602992eddae60122d49d74/experiments/001-reliable-tasks/runs/20261010T042729Z-633b0705/manifest.json).
 
 The hashes help identify the source files used in a run. They do not establish who performed it, and someone who can rewrite both the files and their manifest can forge a matching set. This is reproducible local evidence, not a signed attestation system.
 

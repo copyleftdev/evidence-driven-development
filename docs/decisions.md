@@ -22,8 +22,9 @@ counts fail the gate. No performance or hardware-failure claim is promoted.
 ## Publication boundary
 
 Use original code, synthetic tasks, newly generated evidence and primary-source citations.
-The article is an unpublished draft. Repository hosting, licensing, author biography and
-any public upload are decisions for the author before publication.
+The author authorized the public companion repository and gist assets on `copyleftdev`.
+The DEV.to article remains an unpublished draft. A distribution license and any author
+biography remain editorial choices; no license has been inferred from the account name.
 
 ## Validate the reason a negative control failed
 
@@ -31,3 +32,11 @@ Review identified that the first gate could accept an unrelated child-process fa
 evidence that a deliberate defect was detected. Require nonzero counts for controls and
 the targeted assertion reason, with regression tests. Retain the first run, excluded
 from the stronger gate claim; its observed application results are not rewritten.
+
+## Stable article references and embeddable mirrors
+
+Host all teaching assets in the companion repository. Pin cover, source and evidence links
+to the initial source commit; keep gists as exact mirrors of the two referenced files.
+The DEV draft uses the supported universal embed syntax, with pinned source links as a
+fallback. The local reading copy renders source snapshots without third-party scripts;
+it is an editorial preview, not a claim that DEV rendered the embeds.
